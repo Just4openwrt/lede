@@ -954,7 +954,6 @@ define KernelPackage/tcp-bbrplus
   TITLE:=BBRPLUS TCP congestion control
   KCONFIG:= \
             CONFIG_TCP_CONG_BBRPLUS \
-            CONFIG_DEFAULT_BBRPLUS=y \
             CONFIG_NET_SCH_DEFAULT_BBRP=y \
             CONFIG_NET_SCH_DEFAULT=y \
             CONFIG_DEFAULT_FQ_CODEL=y \

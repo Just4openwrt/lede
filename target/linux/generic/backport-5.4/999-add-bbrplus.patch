@@ -36,13 +36,13 @@ diff -ruaN a/include/net/tcp.h b/include/net/tcp.h
 diff -ruaN a/net/ipv4/Kconfig b/net/ipv4/Kconfig
 --- a/net/ipv4/Kconfig	2020-12-21 20:27:07.000000000 +0800
 +++ b/net/ipv4/Kconfig	2021-01-01 01:59:50.362681282 +0800
-@@ -655,9 +655,18 @@
+@@ -655,6 +655,15 @@
  	bufferbloat, policers, or AQM schemes that do not provide a delay
  	signal. It requires the fq ("Fair Queue") pacing packet scheduler.
  
 +config TCP_CONG_BBRPLUS
 +        tristate "BBRPLUS TCP"
-+        default y
++        default m
 +        ---help---
 +
 +        BBRplus is an enhanced version of BBR (Bottleneck Bandwidth and RTT).
@@ -51,11 +51,7 @@ diff -ruaN a/net/ipv4/Kconfig b/net/ipv4/Kconfig
 +
  choice
  	prompt "Default TCP congestion control"
--	default DEFAULT_CUBIC
-+	default DEFAULT_BBRPLUS
- 	help
- 	  Select the TCP congestion control that will be used by default
- 	  for all connections.
+	default DEFAULT_CUBIC
 @@ -692,6 +701,9 @@
  	config DEFAULT_BBR
  		bool "BBR" if TCP_CONG_BBR=y
@@ -71,8 +67,8 @@ diff -ruaN a/net/ipv4/Kconfig b/net/ipv4/Kconfig
  	default "cdg" if DEFAULT_CDG
  	default "bbr" if DEFAULT_BBR
 -	default "cubic"
-+   default "cubic" if DEFAULT_CUBIC
-+	default "bbrplus"
++	default "bbrplus" if DEFAULT_BBRPLUS
++	default "cubic"
  
  config TCP_MD5SIG
  	bool "TCP: MD5 Signature Option support (RFC2385)"
@@ -1301,17 +1297,7 @@ diff -ruaN a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
 diff -ruaN a/net/sched/Kconfig b/net/sched/Kconfig
 --- a/net/sched/Kconfig	2020-12-21 20:27:07.000000000 +0800
 +++ b/net/sched/Kconfig	2021-01-01 01:58:22.746234069 +0800
-@ -332,7 +332,8 @@
- 	  If unsure, say N.
- 
- config NET_SCH_FQ
--	tristate "Fair Queue"
-+        bool "Fair Queue"
-+        default y
- 	help
- 	  Say Y here if you want to use the FQ packet scheduling algorithm.
- 
-@@ -409,8 +410,9 @@
+@@ -409,8 +409,9 @@
  	  To compile this code as a module, choose M here: the
  	  module will be called sch_plug.
  
@@ -1322,7 +1308,7 @@ diff -ruaN a/net/sched/Kconfig b/net/sched/Kconfig
  	---help---
  	  Support for selection of default queuing discipline.
  
-@@ -420,11 +422,15 @@
+@@ -420,11 +421,15 @@
  
  	  If unsure, say N.
  
@@ -1336,16 +1322,16 @@ diff -ruaN a/net/sched/Kconfig b/net/sched/Kconfig
  choice
  	prompt "Default queuing discipline"
 -	default DEFAULT_PFIFO_FAST
-+	default DEFAULT_FQ
++	default DEFAULT_FQ_CODEL
  	help
  	  Select the queueing discipline that will be used by default
  	  for all network devices.
-@@ -455,7 +461,7 @@
+@@ -451,7 +456,7 @@
+ 	default "fq" if DEFAULT_FQ
  	default "fq_codel" if DEFAULT_FQ_CODEL
  	default "sfq" if DEFAULT_SFQ
- 	default "cake" if DEFAULT_CAKE
 -	default "pfifo_fast"
-+	default "fq"
++	default "fq_codel"
  endif
  
  comment "Classification"
