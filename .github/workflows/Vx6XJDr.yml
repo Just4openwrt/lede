@@ -155,9 +155,14 @@ jobs:
           CONFIG_PACKAGE_luci-app-unblockneteasemusic-mini=n
           CONFIG_PACKAGE_luci-app-unblockmusic=y
           EOF
-          # BBR男寝浪:
+          # # BBR男寝浪:
+          # cat >> .config <<EOF
+          # CONFIG_PACKAGE_kmod-tcp-bbr-nanqinlang=y
+          # EOF
+          # BBRPlus:
           cat >> .config <<EOF
-          CONFIG_PACKAGE_kmod-tcp-bbr-nanqinlang=y
+          CONFIG_TCP_CONG_BBRPLUS=m
+          CONFIG_DEFAULT_FQ_CODEL=y
           EOF
           # LuCI主题:
           cat >> .config <<EOF
