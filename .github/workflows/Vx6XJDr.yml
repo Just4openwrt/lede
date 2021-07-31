@@ -161,8 +161,7 @@ jobs:
           # EOF
           # BBRPlus:
           cat >> .config <<EOF
-          CONFIG_TCP_CONG_BBRPLUS=m
-          CONFIG_DEFAULT_FQ_CODEL=y
+          CONFIG_PACKAGE_kmod-tcp-bbr-bbrplus=y
           EOF
           # LuCI主题:
           cat >> .config <<EOF
