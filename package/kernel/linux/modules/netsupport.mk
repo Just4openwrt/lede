@@ -951,28 +951,26 @@ $(eval $(call KernelPackage,tcp-bbr))
 
 define KernelPackage/tcp-bbrplus
   SUBMENU:=$(NETWORK_SUPPORT_MENU)
-  TITLE:=BBRPLUS TCP congestion control
+  TITLE:=bbrplus TCP congestion control
+  DEPENDS:=+kmod-sched
   KCONFIG:= \
-            CONFIG_TCP_CONG_BBRPLUS \
-            CONFIG_NET_SCH_DEFAULT_BBRP=y \
-            CONFIG_NET_SCH_DEFAULT=y \
-            CONFIG_DEFAULT_FQ_CODEL=y \
-            CONFIG_DEFAULT_NET_SCH="fq_codel"
+	CONFIG_TCP_CONG_ADVANCED=y \
+	CONFIG_TCP_CONG_bbrplus=m
   FILES:=$(LINUX_DIR)/net/ipv4/tcp_bbrplus.ko
-  AUTOLOAD:=$(call AutoProbe,tcp_bbrplus)
+  AUTOLOAD:=$(call AutoLoad,74,tcp_bbrplus)
 endef
 
 define KernelPackage/tcp-bbrplus/description
- BBRplus is an enhanced version of BBR (Bottleneck Bandwidth and RTT).
- Originally introduced by dog250 & cx9208.
- Same as BBR, requires the fq ("Fair Queue") pacing packet scheduler.
+ Kernel module for bbrplus (Bottleneck Bandwidth and RTT) TCP congestion
+ control. It requires the fq ("Fair Queue") pacing packet scheduler.
+ For kernel 4.13+, TCP internal pacing is implemented as fallback.
 endef
 
-TCP_BBRPLUS_SYSCTL_CONF:=sysctl-tcp-bbrplus.conf
+TCP_bbrplus_SYSCTL_CONF:=sysctl-tcp-bbrplus.conf
 
 define KernelPackage/tcp-bbrplus/install
 	$(INSTALL_DIR) $(1)/etc/sysctl.d
-	$(INSTALL_DATA) ./files/$(TCP_BBRPLUS_SYSCTL_CONF) $(1)/etc/sysctl.d/12-tcp-bbrplus.conf
+	$(INSTALL_DATA) ./files/$(TCP_bbrplus_SYSCTL_CONF) $(1)/etc/sysctl.d/12-tcp-bbrplus.conf
 endef
 
 $(eval $(call KernelPackage,tcp-bbrplus))
