@@ -26,7 +26,7 @@ define KernelPackage/qca-nss-crypto
 	SECTION:=kernel
 	CATEGORY:=Kernel modules
 	SUBMENU:=Cryptographic API modules
-	DEPENDS:=@TARGET_qualcommax +kmod-qca-nss-drv +eip197-firmware
+	DEPENDS:=@TARGET_qualcommax +kmod-qca-nss-drv +TARGET_qualcommax_ipq807x:nss-eip-firmware +TARGET_qualcommax_ipq60xx:nss-eip-firmware
 	TITLE:=Kernel driver for NSS crypto driver
 	FILES:=$(PKG_BUILD_DIR)/$(NSS_CRYPTO_DIR)/src/qca-nss-crypto.ko \
 	$(PKG_BUILD_DIR)/$(NSS_CRYPTO_DIR)/tool/qca-nss-crypto-tool.ko
